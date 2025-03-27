@@ -1,49 +1,41 @@
+const calc = require('./');
 const express = require('express');
-const calc = require('./util/calculadora');
 const app = express();
 
-app.get('/ola', (req, res) => {
-    res.send('Olá, mundo!');
+app.get('/', (req, res)=>{
+    let html = '<h1>app_calculadora</h1>';
+    html += '<h3>Rotas da aplicação:</h3>';
+    html += '<p>/somar/:a/:b</p>';
+    html += '<p>/subtrair/:a/:b</p>';
+    html += '<p>/multiplicar/:a/:b</p>';
+    html += '<p>/dividir/:a/:b</p>';
+    res.send(html);
+});
+app.get('/somar/:a/:b', (req, res)=>{
+    let a = Number(req.params.a);
+    let b = Number(req.params.b);
+    res.send('${a} + ${b} = ${calc.somar(a, b)}');
 });
 
-function validarNumeros(req, res, next) {
-    const a = Number(req.params.a);
-    const b = Number(req.params.b);
-
-    if (isNaN(a) || isNaN(b)) {
-        return res.status(400).send('Erro: Parâmetros devem ser números.');
-    }
-
-    req.a = a;
-    req.b = b;
-    next();
-}
-
-app.get('/somar/:a/:b', validarNumeros, (req, res) => {
-    const resultado = calc.somar(req.a, req.b);
-    res.send(`${req.a} + ${req.b} = ${resultado}`);
+app.get('/subrair/:a/:b', (req, res)=>{
+    let a = Number(req.params.a);
+    let b = Number(req.params.b);
+    res.send('${a} - ${b} = ${calc.somar(a, b)}');
 });
 
-app.get('/subtrair/:a/:b', validarNumeros, (req, res) => {
-    const resultado = calc.subtrair(req.a, req.b);
-    res.send(`${req.a} - ${req.b} = ${resultado}`);
+app.get('/multipliar/:a/:b', (req, res)=>{
+    let a = Number(req.params.a);
+    let b = Number(req.params.b);
+    res.send('${a} * ${b} = ${calc.somar(a, b)}');
 });
 
-app.get('/multiplicar/:a/:b', validarNumeros, (req, res) => {
-    const resultado = calc.multiplicar(req.a, req.b);
-    res.send(`${req.a} * ${req.b} = ${resultado}`);
-});
-
-app.get('/dividir/:a/:b', validarNumeros, (req, res) => {
-    if (req.b === 0) {
-        return res.status(400).send('Erro: Divisão por zero não é permitida.');
-    }
-
-    const resultado = calc.dividir(req.a, req.b);
-    res.send(`${req.a} / ${req.b} = ${resultado}`);
+app.get('/dividir/:a/:b', (req, res)=>{
+    let a = Number(req.params.a);
+    let b = Number(req.params.b);
+    res.send('${a} / ${b} = ${calc.somar(a, b)}');
 });
 
 const PORT = 8080;
-app.listen(PORT, () => {
-    console.log(`App rodando na porta ${PORT}`);
+app.listen(PORT, ()=>{
+    console.log('app rodando na porta' + PORT);
 });
